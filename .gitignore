@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+venv/
+.env
+data/uploaded_pdfs/
+.streamlit/
+vectorstore
+d/cachegit commit -m "Remove large file and update .gitignore"
