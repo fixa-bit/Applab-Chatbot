@@ -67,11 +67,15 @@ Access the application at http://localhost:8501
 Open your browser and go to:
 http://localhost:8501
 
-
-⚠️ Important: The application sends requests to the local Ollama server at http://localhost:11434. Make sure it's running before starting the app.
-
-
-
+Docker Deployment:
+docker build -t chatbotnew .
+docker run -it --rm ^
+  -e API_BASE_URL=http://127.0.0.1:8000 ^
+  -e OLLAMA_BASE_URL=http://host.docker.internal:11434 ^
+  -e HF_TOKEN=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 ^
+  -e HF_API_KEY=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 ^
+  -p 8000:8000 -p 8501:8501 ^
+  chatbotnew
 
 
 
