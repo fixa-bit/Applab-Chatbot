@@ -1,21 +1,21 @@
 <!-- python -m venv venv
 venv\Scripts\activate
 pip freeze > requirements.txt -->
-# 🤖 Conversational Chatbot with PDF Support
+# Conversational Chatbot with PDF Support
 
-## 📘 Overview
+## Overview
 This project is a conversational chatbot that supports both general queries and document-based questions. Users can upload PDF documents, and the chatbot will answer questions based on the content of those documents. It uses the **LLaMA 2** model via **Ollama** for generating responses and **FAISS** for document similarity search.
 
-## ✨ Features
+##  Features
 - **General Chat**: Answer questions on a wide range of topics.
 - **PDF Support**: Upload and process PDF documents for context-aware answers.
 
-## 🔧 Prerequisites
+##  Prerequisites
 - Python 3.8+
 - [Ollama](https://ollama.com) (run `ollama pull llama2`)
 - Docker (optional)
 - Python 3.8+
-## 🧠 LLaMA 2 Model via Ollama
+##  LLaMA 2 Model via Ollama
 
 This project uses [Ollama](https://ollama.com) to run the LLaMA 2 language model locally.
 
