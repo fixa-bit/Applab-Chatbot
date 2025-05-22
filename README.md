@@ -45,9 +45,13 @@ echo "OLLAMA_BASE_URL=http://localhost:11434" >> .env
 - Create a `.env` file in the root directory.
 - Add the following variables (adjust as needed):
 
-```env
-API_BASE_URL=http://localhost:8000
-OLLAMA_BASE_URL=http://localhost:11434
+
+  API_BASE_URL=http://backend:8000
+  "HF_HOME" = "D:/cache"
+  HF_TOKEN=...
+  HF_API_KEY=...
+  OLLAMA_BASE_URL=http://host.docker.internal:11434
+
 
 ## 🚀 Running the Application (Development Mode)
 
@@ -64,8 +68,6 @@ Access the application at http://localhost:8501
 Open your browser and go to:
 http://localhost:8501
 
-
-This version is cleaner, easier to follow, and uses proper headings and code blocks for clarity. Let me know if you want a combined one-liner script or cross-platform commands.
 
 
 
