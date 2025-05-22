@@ -43,8 +43,8 @@ echo "OLLAMA_BASE_URL=http://localhost:11434" >> .env
 - Create a `.env` file in the root directory.
 - Add the following variables (adjust as needed):
 
-
-  API_BASE_URL=http://backend:8000
+  API_BASE_URL=http://127.0.0.1:8000
+  #API_BASE_URL=http://backend:8000
   "HF_HOME" = "D:/cache"
   HF_TOKEN=...
   HF_API_KEY=...
