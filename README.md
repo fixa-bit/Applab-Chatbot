@@ -50,12 +50,13 @@ echo "OLLAMA_BASE_URL=http://localhost:11434" >> .env
   HF_API_KEY=...
   OLLAMA_BASE_URL=http://host.docker.internal:11434
 
-
+### 1. Activate Virtual Environment
+venv\Scripts\activate
 ## 🚀 Running the Application (Development Mode)
 
-### 1. Activate Virtual Environment
+
 ```bash
-venv\Scripts\activate
+
 
 1.	Start the FastAPI backend:
 uvicorn backend:app --reload --host 127.0.0.1 --port 8000
