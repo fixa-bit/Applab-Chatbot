@@ -1,7 +1,5 @@
 <!-- python -m venv venv
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 venv\Scripts\activate
-pip install fastapi uvicorn streamlit requests pdfplumber transformers sentence-transformers
 pip freeze > requirements.txt -->
 # 🤖 Conversational Chatbot with PDF Support
 
