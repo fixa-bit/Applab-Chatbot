@@ -55,18 +55,20 @@ venv\Scripts\activate
 ## 🚀 Running the Application (Development Mode)
 
 
+
 ```bash
-
-
-1.	Start the FastAPI backend:
+**1.	Start the FastAPI backend:**
 uvicorn backend:app --reload --host 127.0.0.1 --port 8000
-2.	Start the Streamlit frontend in a separate terminal:
+
+**3.	Start the Streamlit frontend in a separate terminal:**
 streamlit run app.py
 Access the application at http://localhost:8501
-3. Access the Application
+**4. Access the Application**
 Open your browser and go to:
 http://localhost:8501
 
+
+⚠️ Important: The application sends requests to the local Ollama server at http://localhost:11434. Make sure it's running before starting the app.
 
 
 
