@@ -57,13 +57,13 @@ venv\Scripts\activate
 
 
 ```bash
-**1.	Start the FastAPI backend:**
+1.	Start the FastAPI backend:
 uvicorn backend:app --reload --host 127.0.0.1 --port 8000
 
-**3.	Start the Streamlit frontend in a separate terminal:**
+3.	Start the Streamlit frontend in a separate terminal:**
 streamlit run app.py
 Access the application at http://localhost:8501
-**4. Access the Application**
+4. Access the Application
 Open your browser and go to:
 http://localhost:8501
 
