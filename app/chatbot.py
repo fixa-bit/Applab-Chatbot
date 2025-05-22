@@ -18,29 +18,6 @@ load_dotenv()
 
 
 
-#--- Ollama LLaMA 2 integration ---
-# class OllamaLLM(LLM):
-#     model_name: str = "llama2"
-#     print(model_name)
-#     base_url: str = "http://localhost:11434"
-    
-
-#     def _call(self, prompt: str, stop=None) -> str:
-#         response = requests.post(
-#             f"{self.base_url}/api/generate",
-#             json={
-#                 "model": self.model_name,
-#                 "prompt": prompt,
-#                 "stream": False
-#             }
-#         )
-#         response.raise_for_status()
-#         return response.json()["response"]
-
-#     @property
-#     def _llm_type(self) -> str:
-#         return "ollama-llama2"
-
 
 
 class OllamaLLM(LLM):
@@ -211,16 +188,6 @@ def create_vector_store(pdf_path: str, store_name: str = "vectorstore"):
     # Save merged index
     vectordb.save_local(store_name)
     return len(new_chunks)  # Return number of new chunks added
-# Vector store functions
-# def create_vector_store(pdf_path: str):
-#     loader = PyPDFLoader(pdf_path)
-#     docs = loader.load()
-#     for doc in docs:
-#         doc.page_content = clean_text(doc.page_content)
-#     splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
-#     chunks = splitter.split_documents(docs)
-#     vectordb = FAISS.from_documents(chunks, embedding=embedder)
-#     vectordb.save_local("vectorstore")
 
 
 def clean_text(text: str) -> str:
@@ -268,7 +235,7 @@ def choose_fallback_prompt(query: str):
 # Greeting check
 def is_greeting_query(query: str) -> bool:
     query = query.lower().strip()
-    greetings = {"hi", "hello", "hey", "good morning", "good evening", "good afternoon"}
+    greetings = {"hi ", "hello ", "hey ", "good morning", "good evening", "good afternoon"}
     return any(greet in query for greet in greetings)
 
 # Main answer logic
@@ -285,12 +252,7 @@ def clean_text(text: str) -> str:
     return text.strip()
 def get_answer(query: str, relevance_threshold: float = 1.2) -> str:
     try:
-        if is_greeting_query(query):
-            current_time = datetime.datetime.now().strftime("%I:%M %p")
-            logging.info("[CHAIN] Using greeting_chain with greeting_prompt")
-            result = greeting_chain.invoke({"query": query, "time": current_time})
-            return result["text"].strip()
-        logging.info(relevance_threshold)
+        
 
         vectordb = load_vector_store()
         logging.info((vectordb.index.metric_type))
@@ -312,7 +274,12 @@ def get_answer(query: str, relevance_threshold: float = 1.2) -> str:
             return result["text"].strip()
         else:
             logging.info("[INFO] No relevant documents met the threshold (%.2f)", relevance_threshold)
-
+        if is_greeting_query(query):
+            current_time = datetime.datetime.now().strftime("%I:%M %p")
+            logging.info("[CHAIN] Using greeting_chain with greeting_prompt")
+            result = greeting_chain.invoke({"query": query, "time": current_time})
+            return result["text"].strip()
+        logging.info(relevance_threshold)
         fallback_chain = choose_fallback_prompt(query)
         prompt_name = "explain_prompt" if fallback_chain == explain_chain else "fact_prompt"
         logging.info(f"[CHAIN] Using fallback_chain with {prompt_name}")
@@ -320,46 +287,6 @@ def get_answer(query: str, relevance_threshold: float = 1.2) -> str:
         return result["text"].strip()
 
     except Exception as e:
-        logging.warning(f"[ERROR] Exception occurred: {e}. Using fallback_chain.")
-        fallback_chain = choose_fallback_prompt(query)
-        result = fallback_chain.invoke(query)
-        return result["text"].strip()
+        logging.exception("Final fallback also failed.")
+        return "Sorry, something went wrong on the server."
 
-# def get_answer(query: str, relevance_threshold: float = 0.9) -> str:
-#     try:
-#         if is_greeting_query(query):
-#             current_time = datetime.datetime.now().strftime("%I:%M %p")
-#             logging.info("Running greeting_chain with greeting_prompt")
-#             result=greeting_chain.invoke({"query": query, "time": current_time})
-#             return result["text"].strip()
-
-#         vectordb = load_vector_store()
-#         docs_and_scores = vectordb.similarity_search_with_score(query, k=2)
-
-#         relevant_docs = [
-#             doc for doc, score in docs_and_scores
-#             if score >= relevance_threshold and len(doc.page_content.strip().split()) > 20
-#         ]
-
-#         if relevant_docs:
-#             context = "\n".join([doc.page_content for doc in relevant_docs]).strip()
-#             logging.info("Running pdf_chain with pdf_prompt")
-#             #return pdf_chain.invoke({"context": context, "question": query})
-#             result = pdf_chain.invoke(input={"context": context, "question": query})
-#             return result["text"].strip()
-
-#         fallback_chain = choose_fallback_prompt(query)
-#         logging.info(f"Running fallback_chain with prompt: {fallback_chain.prompt.template[:60]}...")
-#         #return fallback_chain.invoke(query)
-#         result = fallback_chain.invoke( query)
-#         return result["text"].strip()
-
-#     except Exception as e:
-#         logging.warning(f"Exception occurred: {e}. Falling back.")
-#         # fallback_chain = choose_fallback_prompt(query)
-#         # return fallback_chain.invoke(query)
-#         result = fallback_chain.invoke( query)
-#         return result["text"].strip()
-
-def process_pdf(path: str):
-    create_vector_store(path)
