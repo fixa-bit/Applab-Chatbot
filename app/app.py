@@ -33,9 +33,18 @@ if query:
     st.session_state.messages.append({"role": "user", "content": query})
 
     with st.spinner("Thinking..."):
-        res = requests.post(f"{API_BASE_URL}/chat/", data={"query": query})
+        #res = requests.post(f"{API_BASE_URL}/chat/", data={"query": query})
         #res = requests.post("http://localhost:8000/chat/", data={"query": query})
-        answer = res.json().get("response", "Sorry, no answer.")
+        res = requests.post(f"{API_BASE_URL}/chat/", data={"query": query})
+
+        if res.status_code == 200:
+            try:
+                answer = res.json().get("response", "Sorry, no answer.")
+            except Exception as e:
+                answer = f"Failed to parse response: {e}"
+        else:
+            answer = f"Error {res.status_code}: {res.text}"
+        #answer = res.json().get("response", "Sorry, no answer.")
     
     st.chat_message("assistant").markdown(answer)
     st.session_state.messages.append({"role": "assistant", "content": answer})
