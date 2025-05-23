@@ -1,15 +1,41 @@
 from fastapi import FastAPI, Form, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+import requests
 from chatbot import get_answer, process_pdf
 import shutil
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
+# @app.post("/chat/")
+# async def chat(query: str = Form(...)):
+#     response = get_answer(query)
+#     print("[DEBUG] Chat response:", response)
+#     return {"response": response}
+
+
+from fastapi.responses import JSONResponse
+import logging
+
 @app.post("/chat/")
 async def chat(query: str = Form(...)):
-    response = get_answer(query)
-    return {"response": response}
+    try:
+        response = get_answer(query)
+        print("[DEBUG] Chat response:", response)
+        return {"response": response}
+    except requests.exceptions.RequestException as e:
+        logging.error(f"[ERROR] Ollama not reachable: {e}")
+        return JSONResponse(
+            status_code=503,
+            content={"response": "Sorry, the language model service is currently unavailable."}
+        )
+    except Exception as e:
+        logging.exception("[ERROR] Unexpected error in /chat/")
+        return JSONResponse(
+            status_code=500,
+            content={"response": "An internal error occurred. Please try again later."}
+        )
+
 
 # @app.post("/upload/")
 # async def upload(file: UploadFile = File(...)):
