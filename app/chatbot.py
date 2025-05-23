@@ -18,29 +18,6 @@ load_dotenv()
 
 
 
-#--- Ollama LLaMA 2 integration ---
-# class OllamaLLM(LLM):
-#     model_name: str = "llama2"
-#     print(model_name)
-#     base_url: str = "http://localhost:11434"
-    
-
-#     def _call(self, prompt: str, stop=None) -> str:
-#         response = requests.post(
-#             f"{self.base_url}/api/generate",
-#             json={
-#                 "model": self.model_name,
-#                 "prompt": prompt,
-#                 "stream": False
-#             }
-#         )
-#         response.raise_for_status()
-#         return response.json()["response"]
-
-#     @property
-#     def _llm_type(self) -> str:
-#         return "ollama-llama2"
-
 
 
 class OllamaLLM(LLM):
@@ -320,7 +297,7 @@ def choose_fallback_prompt(query: str):
 # Greeting check
 def is_greeting_query(query: str) -> bool:
     query = query.lower().strip()
-    greetings = {"hi ", "hello ", "hey ", "good morning", "good evening", "good afternoon"}
+    greetings = {"hi", "hello", "hey", "good morning", "good evening", "good afternoon"}
     return any(greet in query for greet in greetings)
 
 # Main answer logic
@@ -381,7 +358,6 @@ def get_answer(query: str, relevance_threshold: float = 1.2) -> str:
     except Exception as e:
         logging.exception("Final fallback also failed.")
         return "Sorry, something went wrong on the server."
-
 
 
 def process_pdf(path: str):
